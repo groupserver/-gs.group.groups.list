@@ -16,7 +16,7 @@ from __future__ import absolute_import, unicode_literals
 from zope.cachedescriptors.property import Lazy
 from zope.component import createObject
 from gs.group.member.base import user_member_of_group
-from .allgroups import AllGroupsOnSite
+from gs.groups import AllGroupsOnSite
 
 
 class YourGroups(AllGroupsOnSite):
