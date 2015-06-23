@@ -1,0 +1,9 @@
+syntax: glob
+*pyc
+*~
+*egg-info
+dist
+*orig
+*nja
+README.html
+docs/_build
