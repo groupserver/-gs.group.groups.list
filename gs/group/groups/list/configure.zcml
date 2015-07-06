@@ -90,10 +90,10 @@
     <implements interface=".interfaces.IGroupListContentProvider"/>
   </class>
   <adapter
+    name="groupserver.GroupListContent"
     for="zope.interface.Interface
          zope.publisher.interfaces.browser.IDefaultBrowserLayer
          zope.interface.Interface"
-    factory=".contentprovider.GroupsListContentProvider"
     provides="zope.contentprovider.interfaces.IContentProvider"
-    name="groupserver.GroupListContent"/>
+    factory=".contentprovider.GroupsListContentProvider" />
 </configure>
