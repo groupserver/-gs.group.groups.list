@@ -56,7 +56,8 @@ class ListRestricted(ListViewlet):
     @Lazy
     def show(self):
         siteMbr = ((not self.loggedInUser.anonymous)
-                   and user_member_of_site(self.loggedInUser, self.context))
+                   and (user_member_of_site(self.loggedInUser, self.context)
+                        or self.isSiteAdmin))
         retval = siteMbr and (len(self.restrictedGroups) > 0)
         return retval
 
