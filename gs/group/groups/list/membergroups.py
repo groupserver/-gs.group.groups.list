@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2014 OnlineGroups.net and Contributors.
+# Copyright © 2014, 2016 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -25,10 +25,26 @@ class MemberGroups(object):
         self.context = context
         self.origGroups = groups
 
+    @staticmethod
+    def lower_name(g):
+        retval = g.name.lower()
+        return retval
+
     @Lazy
     def loggedInUser(self):
         retval = createObject('groupserver.LoggedInUser', self.context)
         return retval
+
+    def member_group(self, g):
+        '''Append a ``member`` property to the group'''
+        g.member = user_member_of_group(self.loggedInUser, g)
+        return g
+
+    def __len__(self):
+        return len(self.groups)
+
+    def __iter__(self):
+        return iter(self.groups)
 
 #FIXME: Deal with ""manager: looking at the groups.
 
@@ -38,37 +54,18 @@ class PublicGroups(MemberGroups):
 
     @Lazy
     def groups(self):
-        retval = []
-        for g in self.origGroups:
-            if GroupVisibility(g).isPublic:
-                g.member = user_member_of_group(self.loggedInUser, g)
-                retval.append(g)
-        retval.sort(key=lambda g: g.name.lower())
+        retval = [self.member_group(g) for g in self.origGroups if GroupVisibility(g).isPublic]
+        retval.sort(key=self.lower_name)
         return retval
-
-    def __len__(self):
-        return len(self.groups)
-
-    def __iter__(self):
-        return iter(self.groups)
 
 
 class RestrictedGroups(MemberGroups):
     @Lazy
     def groups(self):
-        retval = []
-        for g in self.origGroups:
-            if GroupVisibility(g).isPublicToSite:
-                g.member = user_member_of_group(self.loggedInUser, g)
-                retval.append(g)
-        retval.sort(key=lambda g: g.name.lower())
+        retval = [self.member_group(g) for g in self.origGroups
+                  if GroupVisibility(g).isPublicToSite]
+        retval.sort(key=self.lower_name)
         return retval
-
-    def __len__(self):
-        return len(self.groups)
-
-    def __iter__(self):
-        return iter(self.groups)
 
 
 class PrivateGroups(MemberGroups):
@@ -76,19 +73,9 @@ class PrivateGroups(MemberGroups):
 
     @Lazy
     def groups(self):
-        retval = []
-        for g in self.origGroups:
-            if GroupVisibility(g).isPrivate:
-                g.member = user_member_of_group(self.loggedInUser, g)
-                retval.append(g)
-        retval.sort(key=lambda g: g.name.lower())
+        retval = [self.member_group(g) for g in self.origGroups if GroupVisibility(g).isPrivate]
+        retval.sort(key=self.lower_name)
         return retval
-
-    def __len__(self):
-        return len(self.groups)
-
-    def __iter__(self):
-        return iter(self.groups)
 
 
 class SecretGroups(MemberGroups):
@@ -96,16 +83,6 @@ class SecretGroups(MemberGroups):
 
     @Lazy
     def groups(self):
-        retval = []
-        for g in self.origGroups:
-            if GroupVisibility(g).isSecret:
-                g.member = user_member_of_group(self.loggedInUser, g)
-                retval.append(g)
-        retval.sort(key=lambda g: g.name.lower())
+        retval = [self.member_group(g) for g in self.origGroups if GroupVisibility(g).isSecret]
+        retval.sort(key=self.lower_name)
         return retval
-
-    def __len__(self):
-        return len(self.groups)
-
-    def __iter__(self):
-        return iter(self.groups)

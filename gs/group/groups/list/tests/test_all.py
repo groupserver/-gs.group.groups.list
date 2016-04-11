@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# Copyright © 2013, 2014, 2016 OnlineGroups.net and Contributors.
+# Copyright © 2016 OnlineGroups.net and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -14,8 +14,11 @@
 ############################################################################
 from __future__ import absolute_import, unicode_literals
 from unittest import TestSuite, main as unittest_main
+from gs.group.groups.list.tests.membergroups import (
+    TestMemberGroups, TestPublicGroups, TestRestrictedGroups, TestPrivateGroups, TestSecretGroups, )
 from gs.group.groups.list.tests.yourgroups import TestYourGroups
-testCases = (TestYourGroups, )
+testCases = (TestMemberGroups, TestPublicGroups, TestRestrictedGroups, TestPrivateGroups,
+             TestSecretGroups, TestYourGroups, )
 
 
 def load_tests(loader, tests, pattern):

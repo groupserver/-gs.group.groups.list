@@ -17,8 +17,7 @@ from zope.cachedescriptors.property import Lazy
 from gs.group.member.base import user_member_of_site
 from gs.viewlet import SiteViewlet
 from gs.groups import AllGroupsOnSite
-from .membergroups import PublicGroups, RestrictedGroups, PrivateGroups, \
-    SecretGroups
+from .membergroups import (PublicGroups, RestrictedGroups, PrivateGroups, SecretGroups)
 
 
 class ListViewlet(SiteViewlet):
